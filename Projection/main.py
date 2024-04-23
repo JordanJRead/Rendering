@@ -3,7 +3,6 @@ from copy import deepcopy
 from Classes import camera, shapes
 from Functions import Geometry, Projecting, Linalg, Angles, SimpleLinAlg
 from math import pi, copysign
-from numpy.linalg import inv
 
 #TODO dont use np
 
@@ -18,7 +17,7 @@ my_camera: camera.Camera = camera.Camera(camera_pos, focal_length, fov)
 
 SPEED: float = 3
 
-view_matrix = inv(my_camera.translation_matrix)
+view_matrix = SimpleLinAlg.getMatrixInverse(my_camera.translation_matrix)
 
 # PYGAME
 pygame.init()
@@ -200,7 +199,7 @@ while True:
         FPS = 60
 
     # Update
-    view_matrix = inv(my_camera.translation_matrix)
+    view_matrix = SimpleLinAlg.getMatrixInverse(my_camera.translation_matrix)
     pygame.display.flip()
     delta_time = clock.tick(FPS) / 1000
     print("---END FRAME---\n")
