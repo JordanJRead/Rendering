@@ -4,8 +4,6 @@ from Classes import camera, shapes
 from Functions import Geometry, Projecting, Linalg, Angles, SimpleLinAlg
 from math import pi, copysign
 
-#TODO dont use np
-
 def remap(old_val, old_min, old_max, new_min, new_max):
     return (new_max - new_min)*(old_val - old_min) / (old_max - old_min) + new_min
 
