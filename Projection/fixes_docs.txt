@@ -1,0 +1,43 @@
+### FIXED ###
+# I broke out of the loop instead of continuing to look for more planes
+# 2: Clipping sometimes clips to the wrong plane
+#   NOTE: Clips to the left / right plane instead of bottom (and maybe top, I can only beyond the screen in the bottom and right direciton)
+#   NOTE: There is only ever 1 intersection point, so it's not finding both?
+#   VISUAL: In the extended view, line end weird
+#   CAUSE?: Z coord is the one that changes drastically
+#   NOTE: If the triangle CAN clip with the right plane, then it WILL. It only clips to the correct plane if it can't with the right
+#   NOTE: The line always intersects the bottom plane, whether or not that's what happens. Is my getting multiple points thing not working? Because there's always only 1 point found
+
+### FIXED ###
+# The point order on polygons was the wrong way around, I fixed it by swapping the third and fourth points using a temp deepcopy
+# 4: 2 point clipping doesn't work
+#   NOTE: Not implemented right now (just cancels clipping instead)
+#   VISUAL: Crossing triangle lines
+#   NOTE: When I print the intersection's projected coordinate, it says it is on the edge of the screen (but obviously isn't). Problem with line drawing?
+#   NOTE: Draw order matters, even for polygons
+
+### FIXED ###
+# I just had to fix the other problems
+# 1: Big negative to big positive
+#   Cause: 2 point clipping is broken (maybe also 1 point), so it's projecting something behind the camera
+#   FIX: Fix other clipping problems
+
+### PROBABLY FIXED ###
+# Probably just the above problem
+# 3: Z coord of found clipped point sometimes jumps to focal length, which causes weird effects
+#   NOTE: Might be caused by the above problem (clips to near plane instead of other?)
+#   VISUAL: Triangle suddenly goes beyond edge of screen
+
+### Just writing this directly into the doc as I did not documentate much of it in one spot. I spent weeks on this
+# The does_line_intersect_with_frustum function (paraphrasing name) returns true when it shouldn't.
+# VISUAL: Something outside of the screen will be drawn
+# FIX: Make sure that I am checking that the intersection point is on the frustum. The plane is much more than the face of the frustum.
+# Remember that                                                                                     ^
+
+(directly into doc)
+### Ordering points was not working
+# FIX: angle from 3 points was giving only <= 180. use atan2 instead
+
+(directly into doc)
+### lines were clipping incorrectly (to planes outside and flickering)
+# FIX: Make sure to include is_point_in_frumstum
