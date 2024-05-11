@@ -1,8 +1,9 @@
 from typing import Any
 from math import tan
+from Classes import colliders
 
 class Camera:
-    def __init__(self, world_pos: tuple, focal_length: float, fov: float) -> None:
+    def __init__(self, world_pos: tuple, focal_length: float, fov: float, box_height, box_width, small_move) -> None:
         self.focal_length = focal_length
         self.fov = fov
 
@@ -57,8 +58,19 @@ class Camera:
             [0, 0, 1, world_pos[2]],
             [0, 0, 0, 1]
         ]
+        
+        self.box_height = box_height
+        self.box_width = box_width
+        self.small_move = small_move
+        self.collider = colliders.BoxCollider((world_pos[0], world_pos[1] - box_height / 2, world_pos[2]), (box_width, box_height, box_width))
     
     def move(self, move_by: tuple):
         self.translation_matrix[0][3] += move_by[0]
         self.translation_matrix[1][3] += move_by[1]
         self.translation_matrix[2][3] += move_by[2]
+        
+        world_pos = self.get_world_pos()
+        self.collider = colliders.BoxCollider((world_pos[0], world_pos[1] - self.box_height / 2, world_pos[2]), (self.box_width, self.box_height, self.box_width))
+    
+    def get_world_pos(self) -> tuple:
+        return (self.translation_matrix[0][3], self.translation_matrix[1][3], self.translation_matrix[2][3])

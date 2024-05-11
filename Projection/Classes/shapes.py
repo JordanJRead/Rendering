@@ -1,21 +1,23 @@
 ### RIGHT HANDED ###
 from Functions import SimpleLinAlg
+from Classes import colliders
 
 class Object:
     """
     Class to be inherited from.
     Contains a transform / update_transform function, scale, color, and an init_triangles function to be overwritten
     """
-    def __init__(self, world_pos: tuple = (0, 0, 0), scale: tuple = (1, 1, 1), color: tuple = (255, 255, 255)) -> None:
+    def __init__(self, world_pos: tuple, scale: tuple = (1, 1, 1), color: tuple = (255, 255, 255)) -> None:
         self.color = color
+        self.world_pos = world_pos
         self.scale = scale
         self.init_triangles()
-        self.update_transform(world_pos, scale)
+        self.update_transform()
     
     def init_triangles(self):
         self.triangles: list[Triangle] = []
 
-    def update_transform(self, world_pos: tuple = (0, 0, 0), scale: tuple = (1, 1, 1)):
+    def update_transform(self):
         """
         Update's an objects matrices gives properties.
         2x2x2 space, z points inwards
@@ -24,16 +26,16 @@ class Object:
         # Right handed: z points inwards
 
         self.scale_matrix = [
-            [scale[0], 0, 0, 0],
-            [0, scale[1], 0, 0],
-            [0, 0, scale[2], 0],
+            [self.scale[0], 0, 0, 0],
+            [0, self.scale[1], 0, 0],
+            [0, 0, self.scale[2], 0],
             [0, 0, 0, 1]
         ]
 
         self.translation_matrix = [
-            [1, 0, 0, world_pos[0]],
-            [0, 1, 0, world_pos[1]],
-            [0, 0, 1, world_pos[2]],
+            [1, 0, 0, self.world_pos[0]],
+            [0, 1, 0, self.world_pos[1]],
+            [0, 0, 1, self.world_pos[2]],
             [0, 0, 0, 1]
         ]
 
@@ -72,6 +74,7 @@ class Cube(Object):
                 faces[face] = True
         self.faces = faces
         super().__init__(world_pos, scale, color)
+        self.collider = colliders.BoxCollider(self.world_pos, self.scale)
 
     def init_triangles(self):
         self.triangles: list[Triangle] = []
